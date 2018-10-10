@@ -3,15 +3,21 @@ package main
 import (
     "fmt"
     "strconv"
+    "time"
 )
 func main() {
     sliceMakeTest()
     sliceChangeTest()
     testAnd()
     testStrconvAtoi()
+    testChan()
 }
 
 func sliceMakeTest() {
+    var vch []byte
+    fmt.Println("a slice's len is", len(vch), "which is not inited with make or new")
+    vch = append(vch, 0)
+    fmt.Println("you can append a slice which is not inited whit make or new")
     vchxxx := []byte{0}
     vchxx1 := vchxxx[1:]
     fmt.Println("when a slice is made from an old slice and the start index is len of old slice, " +
@@ -75,5 +81,20 @@ func testStrconvAtoi() {
     result, err := strconv.Atoi("0")
     if result != 0 {
         fmt.Println("strconv.Atoi a \"0\" string should get an zero value")
+    }
+}
+
+func testChan() {
+    testChan := make(chan int, 0)
+    go func() {
+        testChan <- 4
+        fmt.Println("write to chan succeed")
+    } ()
+
+    select {
+    case <-testChan:
+        fmt.Println("you can't use a chan which is not inited with make")
+    case <-time.After(time.Second*10):
+        fmt.Println("you can't use a chan whick is not inited with make")
     }
 }
