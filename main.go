@@ -1,9 +1,14 @@
 package main
-import "fmt"
+
+import (
+    "fmt"
+    "strconv"
+)
 func main() {
     sliceMakeTest()
     sliceChangeTest()
     testAnd()
+    testStrconvAtoi()
 }
 
 func sliceMakeTest() {
@@ -21,11 +26,15 @@ func sliceMakeTest() {
 func sliceChangeTest() {
     // test construct slice with array/slice, changing new slice will also have efect to original array/slice
     array := [5]int{1,2,3,4,5}
-    fmt.Println("old array value:", array)
     bytes := array[:4]
     bytes[0] = 0
-    fmt.Println("array value:", array)
-    fmt.Println("bytes value:", bytes)
+    if array[0] != 0 {
+        fmt.Println("when modify a slice which is made from old slice, the old slice is not changed" +
+            " if the new slice is not realloc memory")
+    } else {
+        fmt.Println("when modify a slice which is made from old slice, the old slice is also changed" +
+            " if the new slice is not realloc memory")
+    }
 
     temp := make([]int, 5)
     i := 0
@@ -33,41 +42,12 @@ func sliceChangeTest() {
         temp[i] = i
         i++
     }
-    fmt.Println("temp value:", temp)
     bytes = append(bytes, temp...)
-    fmt.Println("after append bytes value:", bytes)
     bytes[0] = 100
-    fmt.Println("after modify bytes value:", bytes)
-    fmt.Println("after modify array value:", array)
-
-    newBytes := bytes[:]
-
-    newBytes[0]=1000
-    fmt.Println("after modify newBytes, bytes value:", bytes)
-    fmt.Println("after modify newBytes, newBytes value:", newBytes)
-
-    newBytes = append(newBytes, 10000)
-    fmt.Println("after modify newBytes, bytes value:", bytes)
-    fmt.Println("after modify newBytes, newBytes value:", newBytes)
-
-    newBytes = append(newBytes, 10000)
-    newBytes = append(newBytes, 10000)
-    newBytes = append(newBytes, 10000)
-    newBytes = append(newBytes, 10000)
-    newBytes = append(newBytes, 10000)
-    newBytes = append(newBytes, 10000)
-    newBytes = append(newBytes, 10000)
-    newBytes = append(newBytes, 10000)
-    newBytes = append(newBytes, 10000)
-    newBytes = append(newBytes, 10000)
-    newBytes = append(newBytes, 10000)
-    newBytes = append(newBytes, 10000)
-    newBytes = append(newBytes, 10000)
-    newBytes = append(newBytes, 10000)
-    newBytes = append(newBytes, 10000)
-    newBytes[0]=888
-    fmt.Println("after modify newBytes, bytes value:", bytes)
-    fmt.Println("afger modify newBytes, newBytes value:", newBytes)
+    if array[0] != 100 {
+        fmt.Println("when modify a slice which is made from old slice, the old slice is not changed" +
+            " if the new slice is realloced memory")
+    }
 
 }
 
@@ -77,11 +57,22 @@ func testAnd()  {
     slice = append(slice, 0)
     slice = append(slice, 0)
     slice = append(slice, 0)
-    newSlice := slice[1:1]
-    fmt.Println("len of newSlice is: ", len(newSlice))
+
     if i == 5 && slice[3]==5 {
     } else {
         fmt.Println("go test && only exec successed condition")
     }
 
+}
+
+func testStrconvAtoi() {
+    var strTest string
+    _, err := strconv.Atoi(strTest)
+    if err == nil {
+        fmt.Println("strconv.Atoi a empty string should get an error")
+    }
+    result, err := strconv.Atoi("0")
+    if result != 0 {
+        fmt.Println("strconv.Atoi a \"0\" string should get an zero value")
+    }
 }
