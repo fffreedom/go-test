@@ -60,7 +60,8 @@ func testAnd()  {
 
     if i == 5 && slice[3]==5 {
     } else {
-        fmt.Println("go test && only exec successed condition")
+        fmt.Println("if a condition inculde '&&' opcode, the condition after '&&' exec only " +
+            "if the condition before '&&' exec successed")
     }
 
 }
